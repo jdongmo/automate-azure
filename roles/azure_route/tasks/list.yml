@@ -1,0 +1,15 @@
+---
+- name: Get route rule
+  azure_rm_routetable_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ route.resource_group }}"
+    name: "{{ route.route_table_name }}"
+  register: azure_route_facts
+
+- name: Print route
+  debug:
+    var: azure_route_facts.routes
+...

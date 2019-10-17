@@ -1,0 +1,12 @@
+---
+routes:
+  - name:
+    next_hop_ip_address:
+    next_hop_type:
+    resource_group:
+    route_table_name:
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+...

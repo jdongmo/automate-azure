@@ -1,0 +1,43 @@
+---
+vms:
+  - name:
+    accept_terms:
+    admin_username:
+    admin_password:
+    availability_set:
+    allocated:
+    data_disks: []
+    image:
+      publisher:
+      offer:
+      sku:
+      version:
+      name:
+      resource_group:
+    windows_license_type:
+    location:
+    resource_group:
+    network_interfaces: []
+    os_disk_name:
+    managed_disk_type: "StandardSSD_LRS"
+    os_disk_size_gb: 10000
+    os_type:
+    plan:
+    ip_allocation: "Disabled"
+    remove_on_absent: "all_autocreated"
+    restarted: false
+    ssh_password_enabled: false
+    ssh_public_keys:
+      - path: 'authorized keys file'
+        key_data: 'public key'
+    started:
+    storage_account_name:
+    subnet_name:
+    virtual_network:
+    vm_size:
+    zones:
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+...

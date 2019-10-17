@@ -1,0 +1,13 @@
+---
+vnets:
+  - name:
+    address_prefixes_cidr: []
+    dns_servers:
+    location:
+    purge_address_prefixes:
+    resource_group:
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+...

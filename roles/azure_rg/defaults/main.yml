@@ -1,0 +1,10 @@
+---
+rgs:
+  - name:
+    location:
+    force_delete:
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+...

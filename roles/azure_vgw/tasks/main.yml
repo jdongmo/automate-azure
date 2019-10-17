@@ -1,0 +1,29 @@
+---
+- name: In virtual network gateway state
+  include: "{{ item.state | default('present', true) }}.yml"
+  vars:
+    vgw: "{{ item }}"
+  when:
+    - action is undefined 
+  with_items: "{{ vgws }}"
+
+- name: Update/create virtual network gateway
+  include: present.yml
+  vars:
+    vgw: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'present'
+    - item.state is undefined
+  with_items: "{{ vgws }}"
+
+- name: Delete virtual network gateway
+  include: absent.yml
+  vars:
+    vgw: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'absent'
+    - item.state is undefined
+  with_items: "{{ vgws }}"
+...

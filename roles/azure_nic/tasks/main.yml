@@ -1,0 +1,38 @@
+---
+- name: list network interface
+  include: list.yml
+  vars:
+    nic: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'list'
+  with_items: "{{ nics }}"
+
+- name: In network interface state
+  include: "{{ item.state | default('present', true) }}.yml"
+  vars:
+    nic: "{{ item }}"
+  when:
+    - action is undefined 
+  with_items: "{{ nics }}"
+
+- name: Update/create network interface
+  include: present.yml
+  vars:
+    nic: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'present'
+    - item.state is undefined
+  with_items: "{{ nics }}"
+
+- name: Delete network interface
+  include: absent.yml
+  vars:
+    nic: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'absent'
+    - item.state is undefined
+  with_items: "{{ nics }}"
+...

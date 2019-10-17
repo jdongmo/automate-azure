@@ -1,0 +1,31 @@
+---
+- name: Get route table
+  azure_rm_routetable_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ route.resource_group }}"
+    name: "{{ route.route_table_name }}"
+  register: azure_route_facts
+
+#TODO: Check if route exist
+- name: print existing routes
+  debug:
+    var: azure_route_facts.routes
+
+- name: Create route table
+  azure_rm_route:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    name: "{{ route.name }}"
+    next_hop_type: "{{ route.next_hop_type | default(omit, true) }}"
+    append_tags: false
+    resource_group: "{{ route.resource_group }}"
+    route_table_name: "{{ route.route_table_name }}"
+    state: "present"
+    tags: "{{ route.tags | default(omit, true) }}"
+  register: createroute
+...

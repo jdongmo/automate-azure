@@ -1,0 +1,14 @@
+---
+nsgs:
+  - name:
+    default_rules:
+    purge_default_rules: false
+    rules:
+    purge_rules: true
+    location:
+    resource_group:
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+...

@@ -1,0 +1,38 @@
+---
+- name: list ip address
+  include: list.yml
+  vars:
+    ip: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'list'
+  with_items: "{{ ips }}"
+
+- name: In ip address state
+  include: "{{ item.state | default('present', true) }}.yml"
+  vars:
+    ip: "{{ item }}"
+  when:
+    - action is undefined 
+  with_items: "{{ ips }}"
+
+- name: Update/create ip address
+  include: present.yml
+  vars:
+    ip: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'present'
+    - item.state is undefined
+  with_items: "{{ ips }}"
+
+- name: Delete ip address
+  include: absent.yml
+  vars:
+    ip: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'absent'
+    - item.state is undefined
+  with_items: "{{ ips }}"
+...

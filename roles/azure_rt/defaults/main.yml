@@ -1,0 +1,11 @@
+---
+rts:
+  - name:
+    disable_bgp_route_propagation:
+    location:
+    resource_group:
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+...

@@ -1,0 +1,34 @@
+---
+- set_fact:
+    tags_list: "{{ tags_list | default([]) |
+    union([[tag.key,tag.value]|join(':')]) }}"
+  loop: "{{ lookup('dict', rt.tags | default({})) }}"
+  loop_control:
+    loop_var: "tag"
+
+- name: Get route table
+  azure_rm_routetable_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ rt.resource_group }}"
+    tags: "{{ tags_list | default(omit, true) }}"
+    name: "{{ rt.name | default(omit, true) }}"
+  register: azure_rt_facts
+
+- name: Create route table
+  azure_rm_routetable:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    name: "{{ rt.name }}"
+    disable_bgp_route_propagation: "{{ rt.disable_bgp_route_propagation | default(true, true) }}"
+    append_tags: false
+    location: "{{ rt.location | default(omit, true) }}"
+    resource_group: "{{ rt.resource_group }}"
+    state: "present"
+    tags: "{{ rt.tags | default(omit, true) }}"
+  register: creatert
+...

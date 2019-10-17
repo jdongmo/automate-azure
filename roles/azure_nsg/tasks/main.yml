@@ -1,0 +1,38 @@
+---
+- name: list security group
+  include: list.yml
+  vars:
+    nsg: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'list'
+  with_items: "{{ nsgs }}"
+
+- name: In security group state
+  include: "{{ item.state | default('present', true) }}.yml"
+  vars:
+    nsg: "{{ item }}"
+  when:
+    - action is undefined 
+  with_items: "{{ nsgs }}"
+
+- name: Update/create security group
+  include: present.yml
+  vars:
+    nsg: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'present'
+    - item.state is undefined
+  with_items: "{{ nsgs }}"
+
+- name: Delete security group
+  include: absent.yml
+  vars:
+    nsg: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'absent'
+    - item.state is undefined
+  with_items: "{{ nsgs }}"
+...

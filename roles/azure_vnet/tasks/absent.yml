@@ -1,0 +1,22 @@
+---
+- name: Get virtual network
+  azure_rm_virtualnetwork_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ vnet.resource_group | default(omit) }}"
+    name: "{{ vnet.name | default(omit) }}"
+  register: azure_vnet_facts
+
+- name: Delete virtual network
+  azure_rm_virtualnetwork:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    name: "{{ vnet.name }}"
+    resource_group: "{{ vnet.resource_group }}"
+    state: "absent"
+  register: deletedvnet
+...

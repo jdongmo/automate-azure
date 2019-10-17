@@ -1,0 +1,23 @@
+---
+- set_fact:
+    tags_list: "{{ tags_list | default([]) |
+    union([[tag.key,tag.value]|join(':')]) }}"
+  loop: "{{ lookup('dict', rt.tags | default({})) }}"
+  loop_control:
+    loop_var: "tag"
+
+- name: Get route table
+  azure_rm_routetable_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ rt.resource_group }}"
+    tags: "{{ tags_list | default(omit, true) }}"
+    name: "{{ rt.name | default(omit, true) }}"
+  register: azure_rt_facts
+
+- name: Print route table
+  debug:
+    var: azure_rt_facts.route_tables
+...

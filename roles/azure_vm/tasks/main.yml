@@ -1,0 +1,38 @@
+---
+- name: list vm
+  include: list.yml
+  vars:
+    vm: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'list'
+  with_items: "{{ vms }}"
+
+- name: In vm state
+  include: "{{ item.state | default('present', true) }}.yml"
+  vars:
+    vm: "{{ item }}"
+  when:
+    - action is undefined 
+  with_items: "{{ vms }}"
+
+- name: Update/create vm
+  include: present.yml
+  vars:
+    vm: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'present'
+    - item.state is undefined
+  with_items: "{{ vms }}"
+
+- name: Delete vm
+  include: absent.yml
+  vars:
+    vm: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'absent'
+    - item.state is undefined
+  with_items: "{{ vms }}"
+...

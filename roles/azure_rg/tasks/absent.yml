@@ -1,0 +1,30 @@
+---
+- set_fact:
+    tags_list: "{{ tags_list | default([]) |
+    union([[tag.key,tag.value]|join(':')]) }}"
+  loop: "{{ lookup('dict', rg.tags | default({})) }}"
+  loop_control:
+    loop_var: "tag"
+
+- name: Get resource group
+  azure_rm_resourcegroup_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    list_resources: false
+    tags: "{{ tags_list | default(omit) }}"
+    name: "{{ rg.name | default(omit) }}"
+  register: azure_rg_facts
+
+- name: Delete resource group
+  azure_rm_resourcegroup:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    name: "{{ rg.name }}"
+    force_delete_nonempty: "{{ rg.force_delete | default(false) }}"
+    state: "absent"
+  register: deletedrg
+...

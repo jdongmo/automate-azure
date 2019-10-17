@@ -1,0 +1,30 @@
+---
+- set_fact:
+    tags_list: "{{ tags_list | default([]) |
+    union([[tag.key,tag.value]|join(':')]) }}"
+  loop: "{{ lookup('dict', nsg.tags | default({})) }}"
+  loop_control:
+    loop_var: "tag"
+
+- name: Get security group
+  azure_rm_securitygroup_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ nsg.resource_group }}"
+    tags: "{{ tags_list | default(omit) }}"
+    name: "{{ nsg.name | default(omit) }}"
+  register: azure_nsg_facts
+
+- name: Delete security group
+  azure_rm_securitygroup:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    name: "{{ nsg.name }}"
+    resource_group: "{{ nsg.resource_group }}"
+    state: "absent"
+  register: deletednsg
+...

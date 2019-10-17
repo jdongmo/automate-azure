@@ -1,0 +1,34 @@
+---
+- set_fact:
+    tags_list: "{{ tags_list | default([]) |
+    union([[tag.key,tag.value]|join(':')]) }}"
+  loop: "{{ lookup('dict', vm.tags | default({})) }}"
+  loop_control:
+    loop_var: "tag"
+
+- name: Get virtual machine
+  azure_rm_virtualmachine_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ vm.resource_group }}"
+    tags: "{{ tags_list | default(omit) }}"
+    name: "{{ vm.name | default(omit) }}"
+  register: azure_vm_facts
+  failed_when: false
+
+- name: Delete virtual machine
+  azure_rm_virtualmachine:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    name: "{{ vm.name }}"
+    image: "{{ vm.image }}"
+    remove_on_absent: "{{ vm.remove_on_absent | default('all_autocreated', true) }}"
+    resource_group: "{{ vm.resource_group }}"
+    virtual_network: "{{ vm.virtual_network }}"
+    state: "absent"
+  register: deletedvm
+...

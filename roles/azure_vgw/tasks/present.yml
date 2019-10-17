@@ -1,0 +1,20 @@
+---
+- name: Create virtual network gateway
+  azure_rm_virtualnetworkgateway:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    name: "{{ vgw.name }}"
+    gateway_type: "{{ vgw.gateway_type | default(omit, true) }}"
+    enable_bgp: "{{ vgw.enable_bgp | default(true, true) }}"
+    location: "{{ vgw.location | defaukt(omit, true) }}"
+    resource_group: "{{ vgw.resource_group }}"
+    sku: "{{ vgw.sku | default(omit, true) }}"
+    virtual_network: "{{ vgw.virtual_network }}"
+    vpn_type: "{{ vgw.vpn_type | default(omit, true) }}"
+    state: "present"
+    tags: "{{ vgw.tags | default(omit, true) }}"
+    append_tags: false
+  register: createvgw
+...

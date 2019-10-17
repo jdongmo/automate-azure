@@ -1,0 +1,16 @@
+---
+sas:
+  - name:
+    access_tier:
+    account_type:
+    blob_cors:
+    force_delete_nonempty:
+    https_only:
+    kind:
+    location:
+    resource_group:
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+...

@@ -1,0 +1,41 @@
+---
+- set_fact:
+    tags_list: "{{ tags_list | default([]) |
+    union([[tag.key,tag.value]|join(':')]) }}"
+  loop: "{{ lookup('dict', nic.tags | default({})) }}"
+  loop_control:
+    loop_var: "tag"
+
+- name: Get network interface
+  azure_rm_networkinterface_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ nic.resource_group }}"
+    tags: "{{ tags_list | default(omit) }}"
+    name: "{{ nic.name | default(omit) }}"
+  register: azure_nic_facts
+
+- name: Create network interface
+  azure_rm_networkinterface:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    name: "{{ nic.name }}"
+    create_with_security_group: "{{ nic.create_with_security_group | default(false, true) }}"
+    dns_servers: "{{ nic.dns_servers | default(omit, true) }}"
+    enable_accelerated_networking: "{{ nic.enable_accelerated_networking
+    | default(omit, true) }}"
+    enable_ip_forwarding: "{{ nic.enable_ip_forwarding | default(true, true) }}"
+    ip_configurations: "{{ nic.ip_configurations | default({}, true) }}"
+    append_tags: false
+    resource_group: "{{ nic.resource_group }}"
+    security_group: "{{ nic.security_group | default(omit, true) }}"
+    subnet_name: "{{ nic.subnet_name }}"
+    virtual_network: "{{ nic.virtual_network }}"
+    state: "present"
+    tags: "{{ nic.tags | default(omit, true) }}"
+  register: createnic
+...

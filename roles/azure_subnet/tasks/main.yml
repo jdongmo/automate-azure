@@ -1,0 +1,38 @@
+---
+- name: list subnet
+  include: list.yml
+  vars:
+    subnet: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'list'
+  with_items: "{{ subnets }}"
+
+- name: In subnet state
+  include: "{{ item.state | default('present', true) }}.yml"
+  vars:
+    subnet: "{{ item }}"
+  when:
+    - action is undefined 
+  with_items: "{{ subnets }}"
+
+- name: Update/create subnet
+  include: present.yml
+  vars:
+    subnet: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'present'
+    - item.state is undefined
+  with_items: "{{ subnets }}"
+
+- name: Delete subnet
+  include: absent.yml
+  vars:
+    subnet: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'absent'
+    - item.state is undefined
+  with_items: "{{ subnets }}"
+...

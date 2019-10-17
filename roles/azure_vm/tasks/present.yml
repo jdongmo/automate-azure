@@ -1,0 +1,75 @@
+---
+- set_fact:
+    tags_list: "{{ tags_list | default([]) |
+    union([[tag.key,tag.value]|join(':')]) }}"
+  loop: "{{ lookup('dict', vm.tags | default({})) }}"
+  loop_control:
+    loop_var: "tag"
+
+- name: Get vitual machine
+  azure_rm_virtualmachine_facts:
+    ad_user: "{{ azure_ad_user | default(omit) }}"
+    password: "{{ azure_password | default(omit) }}"
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ vm.resource_group }}"
+    tags: "{{ tags_list | default(omit) }}"
+    name: "{{ vm.name | default(omit) }}"
+  register: azure_vm_facts
+  failed_when: false
+
+#- name: get urn
+#  shell: |
+#    az vm image list --all --publisher {{ vm.image.publisher }} --offer {{ vm.image.offer }} --sku {{ vm.image.sku }} --query [].urn --output tsv
+#  register: urn
+#  when:
+#    - (vm.plan | default({}, true)) != {}
+
+#- name: accept plan
+#  shell: | 
+#    az vm image accept-terms --urn {{ urn.stdout_lines | last }}
+#  when:
+#    - (vm.plan | default({}, true)) != {}
+
+- name: Create vitual machine
+  azure_rm_virtualmachine:
+    ad_user: "{{ azure_ad_user | default(omit) }}"
+    password: "{{ azure_password | default(omit) }}"
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    name: "{{ vm.name }}"
+    accept_terms: "{{ vm.accept_terms | default(false, true) }}"
+    admin_username: "{{ vm.admin_username | default('admin', true) }}"
+    admin_password: "{{ vm.admin_password | default(omit, true) }}"
+    availability_set: "{{ vm.availability_set | default(omit, true) }}"
+    location: "{{ vm.location | default(omit, true) }}"
+    allocated: "{{ vm.allocated | default(omit, true) }}"
+    data_disks: "{{ vm.data_disks | default([], true) }}"
+    image: "{{ vm.image }}"
+    windows_license_type: "{{ vm.windows_license_type | default(omit, true) }}"
+    network_interfaces: "{{ vm.network_interfaces | default(omit, true) }}"
+    os_disk_name: "{{ vm.os_disk_name | default(omit, true) }}"
+    managed_disk_type: "{{ vm.managed_disk_type | default('StandardSSD_LRS', true) }}"
+    os_disk_size_gb: "{{ vm.os_disk_size_gb | default(500, true) }}"
+    os_type: "{{ vm.os_type | default(omit, true) }}"
+    plan: "{{ vm.plan | default(omit, true) }}"
+    public_ip_allocation_method: "{{ vm.ip_allocation | default('Disabled', true) }}"
+    resource_group: "{{ vm.resource_group }}"
+    restarted: "{{ vm.restarted | default(false, true) }}"
+    ssh_password_enabled: "{{ vm.ssh_password_enabled | default(false, true) }}"
+    ssh_public_keys: "{{ vm.ssh_public_keys | default(omit, true) }}"
+    started: "{{ vm.started | default(true, true) }}"
+    storage_account_name: "{{ vm.storage_account_name | default(omit, true) }}"
+    subnet_name: "{{ vm.subnet_name | default(omit, true) }}"
+    virtual_network: "{{ vm.virtual_network }}"
+    vm_size: "{{ vm.vm_size | default('Standard_M8-2ms', true) }}"
+    zones: "{{ vm.zone | default(omit, true) }}"
+    append_tags: false
+    state: "present"
+    tags: "{{ vm.tags | default(omit, true) }}"
+  register: createvm
+...

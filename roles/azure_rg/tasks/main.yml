@@ -1,0 +1,38 @@
+---
+- name: list resource group
+  include: list.yml
+  when:
+    - action is defined 
+    - action == 'list'
+  vars:
+    rg: "{{ item }}"
+  with_items: "{{ rgs }}"
+
+- name: In resourse group state
+  include: "{{ item.state | default('present', true) }}.yml"
+  vars:
+    rg: "{{ item }}"
+  when:
+    - action is undefined 
+  with_items: "{{ rgs }}"
+
+- name: Update/create resourse group
+  include: present.yml
+  vars:
+    rg: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'present'
+    - item.state is undefined
+  with_items: "{{ rgs }}"
+
+- name: Delete resourse group
+  include: absent.yml
+  vars:
+    rg: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'absent'
+    - item.state is undefined
+  with_items: "{{ rgs }}"
+...

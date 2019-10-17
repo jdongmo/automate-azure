@@ -1,0 +1,25 @@
+---
+- name: Get subnet
+  azure_rm_subnet_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ subnet.resource_group }}"
+    virtual_network_name: "{{ subnet.virtual_network_name }}"
+    name: "{{ subnet.name | default(omit) }}"
+  register: azure_subnet_facts
+  failed_when: false
+
+- name: Delete subnet
+  azure_rm_subnet:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    name: "{{ subnet.name }}"
+    virtual_network_name: "{{ subnet.virtual_network_name }}"
+    resource_group: "{{ subnet.resource_group }}"
+    state: "absent"
+  register: deletedsubnet
+...

@@ -1,0 +1,37 @@
+---
+- set_fact:
+    tags_list: "{{ tags_list | default([]) |
+    union([[tag.key,tag.value]|join(':')]) }}"
+  loop: "{{ lookup('dict', ip.tags | default({})) }}"
+  loop_control:
+    loop_var: "tag"
+
+- name: Get ip address
+  azure_rm_publicipaddress_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ ip.resource_group }}"
+    tags: "{{ tags_list | default(omit) }}"
+    name: "{{ ip.name | default(omit) }}"
+  register: azure_ip_facts
+
+- name: Create ip address
+  azure_rm_publicipaddress:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    name: "{{ ip.name }}"
+    allocation_method: "{{ ip.allocation_method | default('static', true) }}"
+    domain_name: "{{ ip.domain_name | default(omit, true) }}"
+    idle_timeout: "{{ ip.idle_timeout | default(1, true) }}"
+    ip_tags: "{{ ip.ip_tags | default(omit, true) }}"
+    resource_group: "{{ ip.resource_group }}"
+    sku: "{{ ip.sku | default('standard', true) }}"
+    append_tags: false
+    state: "present"
+    tags: "{{ ip.tags | default(omit, true) }}"
+  register: createip
+...

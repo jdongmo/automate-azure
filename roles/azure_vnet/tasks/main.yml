@@ -1,0 +1,38 @@
+---
+- name: list virtual network
+  include: list.yml
+  vars:
+    vnet: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'list'
+  with_items: "{{ vnets }}"
+
+- name: In virtual network state
+  include: "{{ item.state | default('present', true) }}.yml"
+  vars:
+    vnet: "{{ item }}"
+  when:
+    - action is undefined 
+  with_items: "{{ vnets }}"
+
+- name: Update/create virtual network
+  include: present.yml
+  vars:
+    vnet: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'present'
+    - item.state is undefined
+  with_items: "{{ vnets }}"
+
+- name: Delete virtual network
+  include: absent.yml
+  vars:
+    vnet: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'absent'
+    - item.state is undefined
+  with_items: "{{ vnets }}"
+...

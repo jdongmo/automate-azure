@@ -1,0 +1,38 @@
+---
+- name: list storage account
+  include: list.yml
+  vars:
+    sa: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'list'
+  with_items: "{{ sas }}"
+
+- name: In storage account state
+  include: "{{ item.state | default('present', true) }}.yml"
+  vars:
+    sa: "{{ item }}"
+  when:
+    - action is undefined 
+  with_items: "{{ sas }}"
+
+- name: Update/create storage account
+  include: present.yml
+  vars:
+    sa: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'present'
+    - item.state is undefined
+  with_items: "{{ sas }}"
+
+- name: Delete storage account
+  include: absent.yml
+  vars:
+    sa: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'absent'
+    - item.state is undefined
+  with_items: "{{ sas }}"
+...

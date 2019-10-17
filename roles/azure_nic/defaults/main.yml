@@ -1,0 +1,17 @@
+---
+nics:
+  - name:
+    create_with_security_group: false
+    dns_servers: []
+    enable_accelerated_networking: true
+    enable_ip_forwarding: true
+    ip_configurations: {}
+    resource_group:
+    security_group:
+    subnet_name:
+    virtual_network:
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+...

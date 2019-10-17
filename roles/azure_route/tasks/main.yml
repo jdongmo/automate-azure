@@ -1,0 +1,38 @@
+---
+- name: list route
+  include: list.yml
+  vars:
+    route: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'list'
+  with_items: "{{ routes }}"
+
+- name: In route table state
+  include: "{{ item.state | default('present', true) }}.yml"
+  vars:
+    route: "{{ item }}"
+  when:
+    - action is undefined 
+  with_items: "{{ routes }}"
+
+- name: Update/create route table
+  include: present.yml
+  vars:
+    route: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'present'
+    - item.state is undefined
+  with_items: "{{ routes }}"
+
+- name: Delete route table
+  include: absent.yml
+  vars:
+    route: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'absent'
+    - item.state is undefined
+  with_items: "{{ routes }}"
+...

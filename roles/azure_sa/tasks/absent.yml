@@ -1,0 +1,33 @@
+---
+- set_fact:
+    tags_list: "{{ tags_list | default([]) |
+    union([[tag.key,tag.value]|join(':')]) }}"
+  loop: "{{ lookup('dict', sa.tags) }}"
+  loop_control:
+    loop_var: "tag"
+
+- name: Get storage account
+  azure_rm_storageaccount_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ sa.resource_group | default(omit) }}"
+    show_connection_string: "{{ sa.show_connection_string |
+    default(true, true) }}"
+    tags: "{{ tags_list | default(omit) }}"
+    name: "{{ sa.name | default(omit) }}"
+  register: azure_sa_facts
+
+- name: Delete storage account
+  azure_rm_storageaccount:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    name: "{{ sa.name }}"
+    force_delete_nonempty: "{{ sa.access_tier | default(false, true) }}"
+    resource_group: "{{ sa.resource_group }}"
+    state: "absent"
+  register: deletedsa
+...

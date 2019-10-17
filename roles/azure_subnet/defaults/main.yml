@@ -1,0 +1,10 @@
+---
+subnets:
+  - name:
+    address_prefix_cidr:
+    virtual_network_name:
+    resource_group:
+    security_group:
+    route_table:
+    state:
+...
