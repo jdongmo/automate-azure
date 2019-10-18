@@ -1,0 +1,67 @@
+---
+nics:
+  - name: 'mgt-nic-pa'
+    create_with_security_group: false
+    dns_servers: []
+    enable_accelerated_networking: false
+    enable_ip_forwarding: false
+    ip_configurations:
+      - name: "mgt-pa-core-ipc"
+        public_ip_address_name: "mgt-pa-core"
+    resource_group: 'PROD_CAEA'
+    security_group: "hub-core-caea-mgt-prod-sg01"
+    subnet_name: "hub-core-caea-mgt-prod-sub01"
+    virtual_network: "hub-core-caea-vnet"
+    state: "present"
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+  - name: 'trust-prod-nic-pa'
+    create_with_security_group: false
+    enable_accelerated_networking: false
+    enable_ip_forwarding: true
+    ip_configurations:
+      - name: "trust-prod-pa-core-ipc"
+        private_ip_address: "trust-prod-priv-ip-pa-core"
+    resource_group: 'PROD_CAEA'
+    security_group: "hub-core-caea-trust-prod-sg01"
+    subnet_name: "hub-core-caea-trust-prod-sub01"
+    virtual_network: "hub-core-caea-vnet"
+    state: "present"
+  - name: 'trust-nprod-nic-pa'
+    create_with_security_group: false
+    enable_accelerated_networking: false
+    enable_ip_forwarding: true
+    ip_configurations:
+      - name: "trust-nprod-pa-core-ipc"
+        private_ip_address: "trust-nprod-priv-ip-pa-core"
+    resource_group: 'PROD_CAEA'
+    security_group: "hub-core-caea-trust-nprod-sg01"
+    subnet_name: "hub-core-caea-trust-nprod-sub01"
+    virtual_network: "hub-core-caea-vnet"
+    state: "present"
+  - name: 'untrust-prod-nic-pa'
+    create_with_security_group: false
+    enable_accelerated_networking: false
+    enable_ip_forwarding: true
+    ip_configurations:
+      - name: "untrust-prod-pa-core-ipc"
+        private_ip_address: "untrust-prod-priv-ip-pa-core"
+    resource_group: 'PROD_CAEA'
+    security_group: "hub-core-caea-untrust-prod-sg01"
+    subnet_name: "hub-core-caea-untrust-prod-sub01"
+    virtual_network: "hub-core-caea-vnet"
+    state: "present"
+  - name: 'untrust-nprod-nic-pa'
+    create_with_security_group: false
+    enable_accelerated_networking: false
+    enable_ip_forwarding: true
+    ip_configurations:
+      - name: "untrust-nprod-pa-core-ipc"
+        private_ip_address: "untrust-nprod-priv-ip-pa-core"
+    resource_group: 'PROD_CAEA'
+    security_group: "hub-core-caea-untrust-nprod-sg01"
+    subnet_name: "hub-core-caea-untrust-nprod-sub01"
+    virtual_network: "hub-core-caea-vnet"
+    state: "present"
+...

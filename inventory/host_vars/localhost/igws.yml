@@ -1,0 +1,9 @@
+---
+igws:
+  - region: "us-east-2"
+    tags:
+      "Name": "test-igw"
+      "env": "test"
+      "provisioner": "ansible"
+    vpc_name: "test-vpc"
+...

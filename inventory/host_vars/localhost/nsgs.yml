@@ -1,0 +1,99 @@
+---
+nsgs:
+  - name: "hub-core-cacn-mgt-prod-sg01"
+    rules:
+    purge_rules: true
+    resource_group: "PROD_CACN"
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+  - name: "hub-core-cacn-trust-prod-sg01"
+    rules:
+    purge_rules: true
+    resource_group: "PROD_CACN"
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+  - name: "hub-core-cacn-untrust-prod-sg01"
+    rules:
+    purge_rules: true
+    resource_group: "PROD_CACN"
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+  - name: "hub-core-caea-mgt-prod-sg01"
+    rules:
+    purge_rules: true
+    resource_group: "PROD_CAEA"
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+  - name: "hub-core-caea-trust-prod-sg01"
+    rules:
+    purge_rules: true
+    resource_group: "PROD_CAEA"
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+  - name: "hub-core-caea-untrust-prod-sg01"
+    rules:
+    purge_rules: true
+    resource_group: "PROD_CAEA"
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+  - name: "hub-core-cacn-mgt-nprod-sg01"
+    rules:
+    purge_rules: true
+    resource_group: "PROD_CACN"
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+  - name: "hub-core-cacn-trust-nprod-sg01"
+    rules:
+    purge_rules: true
+    resource_group: "PROD_CACN"
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+  - name: "hub-core-cacn-untrust-nprod-sg01"
+    rules:
+    purge_rules: true
+    resource_group: "PROD_CACN"
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+  - name: "hub-core-caea-mgt-nprod-sg01"
+    rules:
+    purge_rules: true
+    resource_group: "PROD_CAEA"
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+  - name: "hub-core-caea-trust-nprod-sg01"
+    rules:
+    purge_rules: true
+    resource_group: "PROD_CAEA"
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+  - name: "hub-core-caea-untrust-nprod-sg01"
+    rules:
+    purge_rules: true
+    resource_group: "PROD_CAEA"
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+...

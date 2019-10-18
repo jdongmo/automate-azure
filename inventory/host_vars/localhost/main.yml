@@ -1,0 +1,7 @@
+---
+ansible_python_interpreter: "/usr/bin/python3"
+proxy:
+  ssh_user: 'ubuntu'
+  ssh_host: '18.190.73.170'
+  ssh_key: '~/.ssh/keys/aws-2019-2020'
+...

@@ -1,0 +1,27 @@
+---
+vnets:
+  - name: "hub-core-cacn-vnet"
+    address_prefixes_cidr:
+      - "10.225.7.0/25"
+      - "10.220.7.0/25"
+    dns_servers:
+    location: "canadacentral"
+    purge_address_prefixes:
+    resource_group: "PROD_CACN"
+    state: "present"
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+  - name: "hub-core-caea-vnet"
+    address_prefixes_cidr:
+      - "10.225.135.0/25"
+      - "10.220.135.0/25"
+    dns_servers:
+    location: "eastus"
+    purge_address_prefixes:
+    resource_group: "PROD_CAEA"
+    state: "present"
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+...

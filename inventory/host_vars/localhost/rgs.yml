@@ -1,0 +1,17 @@
+---
+rgs:
+  - name: PROD_CAEA
+    location: "eastus" 
+    force_delete: true
+    state: "present"
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+  - name: PROD_CACN
+    location: "canadacentral" 
+    force_delete: false
+    state: "present"
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+...

@@ -1,0 +1,31 @@
+---
+rts:
+  - name: "hub-core-cacn-untrust-prod-sub01-rt"
+    disable_bgp_route_propagation:
+    location: 
+    resource_group: "PROD_CACN"
+    state: "present"
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+  - name: "hub-core-cacn-trust-prod-sub01-rt"
+    disable_bgp_route_propagation:
+    location: 
+    resource_group: "PROD_CACN"
+    state: "present"
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+  - name: "hub-core-caea-untrust-prod-sub01-rt"
+    resource_group: "PROD_CAEA"
+    state: "present"
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+  - name: "hub-core-caea-trust-prod-sub01-rt"
+    resource_group: "PROD_CAEA"
+    state: "present"
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+...

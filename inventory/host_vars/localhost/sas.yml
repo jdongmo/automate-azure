@@ -1,0 +1,16 @@
+---
+sas:
+  - name: 'hubcorecaeasa'
+    access_tier: 'Hot'
+    account_type: "Standard_LRS"
+    blob_cors: []
+    force_delete_nonempty: true
+    https_only: true
+    kind: 'StorageV2'
+    location:
+    resource_group: 'PROD_CAEA'
+    state: 'present'
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+...

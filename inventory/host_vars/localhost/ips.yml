@@ -1,0 +1,15 @@
+---
+ips:
+  - name: "mgt-pa-core"
+    allocation_method: "static"
+    domain_name:
+    idle_timeout: 4
+    ip_tags:
+    resource_group: 'PROD_CAEA'
+    sku: "standard"
+    state: 'present'
+    version:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+...

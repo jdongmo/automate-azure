@@ -1,0 +1,67 @@
+---
+vms:
+  - name: hub-core-test-vm01
+    admin_username: adminuser
+    admin_password: Userp4ssw0rd
+    image:
+      publisher: 'OpenLogic'
+      offer: "CentOS"
+      sku: '7.1'
+      version: 'latest'
+    resource_group: 'PROD_CAEA'
+    managed_disk_type: "StandardSSD_LRS"
+    os_disk_size_gb: 500
+    ip_allocation: "Disabled"
+    remove_on_absent: "all_autocreated"
+    restarted: false
+    ssh_password_enabled: true
+    storage_account_name: 'hubcorecaeasa'
+    subnet_name: 'hub-core-caea-untrust-prod-sub01'
+    virtual_network: 'hub-core-caea-vnet'
+    vm_size: 'Standard_DS3_v2'
+    state: 'absent'
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+  - name: hub-core-pa-vm01
+    accept_terms: true
+    admin_username: 'adminuser'
+    admin_password: 'Userp4ssw0rd'
+    availability_set:
+    allocated:
+    data_disks: []
+    image:
+      publisher: 'paloaltonetworks'
+      offer: "vmseries1"
+      sku: 'bundle1'
+      version: 'latest'
+    resource_group: 'PROD_CAEA'
+    network_interfaces:
+      - 'mgt-nic-pa'
+      - 'trust-prod-nic-pa'
+      - 'trust-nprod-nic-pa'
+      - 'untrust-prod-nic-pa'
+      - 'untrust-nprod-nic-pa'
+    os_disk_name:
+    managed_disk_type: "StandardSSD_LRS"
+    os_disk_size_gb: 1000
+    os_type:
+    plan:
+      name: 'byol'
+      product: 'vmseries1'
+      publisher: 'paloaltonetworks'
+    ip_allocation: "Disabled"
+    remove_on_absent: "all_autocreated"
+    restarted: false
+    ssh_password_enabled: true
+    ssh_public_keys:
+    storage_account_name: 'hubcorecaeasa'
+    subnet_name: 
+    virtual_network: 'hub-core-caea-vnet'
+    vm_size: "Standard_D4_v2"
+    zones:
+    state: 'present'
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+...
