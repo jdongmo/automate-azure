@@ -1,0 +1,11 @@
+plugin: azure_rm
+auth_source: auto
+location: canadaeast,canadacentral,eastus,eastus2,westcentralus
+cloud_environment: "AzureCloud"
+hostvar_expressions:
+  ansible_host: (public_ipv4_addresses + private_ipv4_addresses) | first
+  provider: "'azure'"
+keyed_groups:
+  - prefix: azure
+    key: tags.none | default('ec2')
+plain_host_names: yes
