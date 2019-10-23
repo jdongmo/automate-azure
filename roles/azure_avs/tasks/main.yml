@@ -1,0 +1,38 @@
+---
+- name: list availability set
+  include: list.yml
+  vars:
+    avs: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'list'
+  with_items: "{{ avss }}"
+
+- name: In availability set state
+  include: "{{ item.state | default('present', true) }}.yml"
+  vars:
+    avs: "{{ item }}"
+  when:
+    - action is undefined 
+  with_items: "{{ avss }}"
+
+- name: Update/create availability set
+  include: present.yml
+  vars:
+    avs: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'present'
+    - item.state is undefined
+  with_items: "{{ avss }}"
+
+- name: Delete availability set
+  include: absent.yml
+  vars:
+    avs: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'absent'
+    - item.state is undefined
+  with_items: "{{ avss }}"
+...

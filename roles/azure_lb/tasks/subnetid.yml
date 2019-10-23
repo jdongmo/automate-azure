@@ -1,0 +1,51 @@
+---
+- name: Set subnet id
+  set_fact:
+    cfipc: {}
+
+- name: Get virtual network
+  azure_rm_virtualnetwork_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ lb.resource_group }}"
+    name: "{{ fipc.virtual_network_name }}"
+  register: azure_vnet_facts
+  failed_when:
+    - (azure_vnet_facts.virtualnetworks | length) < 1
+
+- name: Get subnet
+  azure_rm_subnet_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ lb.resource_group }}"
+    virtual_network_name: "{{ fipc.virtual_network_name }}"
+    name: "{{ fipc.subnet_name }}"
+  register: azure_subnet_facts
+  when:
+    - fipc.subnet_name is defined
+
+- name: Clean ip configuration
+  set_fact:
+    cfipc: "{{ cfipc | combine({field.key: field.value}) }}"
+  with_dict: "{{ fipc }}"
+  loop_control:
+    loop_var: "field"
+  when:
+    - field.key not in ['virtual_network_name', 'subnet_name']
+
+- name: Set subnet id
+  set_fact:
+    cfipc: "{{ cfipc | combine({'subnet': azure_subnet_facts.subnets[0].id}) }}"
+  when:
+    - azure_subnet_facts is defined
+    - azure_subnet_facts.subnets is defined
+    - (azure_subnet_facts.subnets | length) == 1
+
+- name: Build ip configuration list
+  set_fact:
+    ip_configurations: "{{ ip_configurations | default([], true) | union([cfipc]) }}"
+...

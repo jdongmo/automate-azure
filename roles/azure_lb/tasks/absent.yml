@@ -1,0 +1,30 @@
+---
+- set_fact:
+    tags_list: "{{ tags_list | default([]) |
+    union([[tag.key,tag.value]|join(':')]) }}"
+  loop: "{{ lookup('dict', lb.tags | default({})) }}"
+  loop_control:
+    loop_var: "tag"
+
+- name: Get load balancer
+  azure_rm_loadbalancer_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ lb.resource_group }}"
+    tags: "{{ tags_list | default(omit) }}"
+    name: "{{ lb.name | default(omit) }}"
+  register: azure_lb_facts
+
+- name: Delete load balancer
+  azure_rm_loadbalancer:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    name: "{{ lb.name }}"
+    resource_group: "{{ lb.resource_group }}"
+    state: "absent"
+  register: deletedlb
+...

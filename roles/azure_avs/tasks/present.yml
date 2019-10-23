@@ -1,0 +1,36 @@
+---
+- set_fact:
+    tags_list: "{{ tags_list | default([]) |
+    union([[tag.key,tag.value]|join(':')]) }}"
+  loop: "{{ lookup('dict', avs.tags | default({})) }}"
+  loop_control:
+    loop_var: "tag"
+
+- name: Get availability set
+  azure_rm_availabilityset_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ avs.resource_group }}"
+    tags: "{{ tags_list | default(omit, true) }}"
+    name: "{{ avs.name | default(omit, true) }}"
+  register: azure_avs_facts
+
+- name: Create availability set
+  azure_rm_availabilityset:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    name: "{{ avs.name }}"
+    platform_fault_domain_count: "{{ avs.platform_fault_domain_count | default(2, true) }}"
+    platform_update_domain_count: "{{ avs.platform_update_domain_count | default(2, true) }}"
+    sku: "{{ avs.sku | default(omit, true) }}"
+    append_tags: false
+    location: "{{ avs.location | default(omit, true) }}"
+    resource_group: "{{ avs.resource_group }}"
+    state: "present"
+    tags: "{{ avs.tags | default(omit, true) }}"
+  register: createavs
+...

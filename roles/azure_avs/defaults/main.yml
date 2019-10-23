@@ -1,0 +1,13 @@
+---
+ass:
+  - name:
+    platform_fault_domain_count: 2
+    platform_update_domain_count: 2
+    location:
+    resource_group:
+    sku: "Classic"
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+...

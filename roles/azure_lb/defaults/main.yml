@@ -1,0 +1,47 @@
+---
+lbs:
+  - name:
+    backend_address_pools:
+      - name:
+    frontend_ip_configurations:
+      - name:
+        private_ip_allocation_method: 'Dynamic' #Static, Dynamic
+        private_ip_address:
+        public_ip_address:
+        subnet:
+    inbound_nat_pools:
+      - name:
+        frontend_ip_configuration_name:
+        frontend_port_range_start: 80 #1-65535
+        frontend_port_range_end: 80 #1-65535
+        protocol: 'Àll' #Tcp, Udp, All
+        backend_port: 80 #1-65535
+    inbound_nat_rules:
+      - name:
+        protocol: 'Àll' #Tcp, Udp, All
+        frontend_ip_configuration:
+        frontend_port: 80 #0-65535, 0 to any
+        backend_port: 80 #0-65535, 0 to any
+    load_balancing_rules:
+      - name:
+        backend_address_pool:
+        backend_port: 80 #0-65535, 0 to any
+        frontend_ip_configuration:
+        frontend_port: 80 #0-65535, 0 to any
+        probe:
+        load_distribution: Default #Default, SourceIP, SourceIPProtocol
+        protocol: 'Àll' #Tcp, Udp, All
+    probes:
+      - name:
+        port: 80
+        interval: 15
+        fail_count: 3
+        protocol: 'Tcp' #Tcp, Http
+        request_path: 'Tcp' #When protocol is Http
+    resource_group:
+    sku: 'Standard'
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+...

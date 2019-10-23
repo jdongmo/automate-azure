@@ -1,0 +1,38 @@
+---
+- name: list load balancer
+  include: list.yml
+  vars:
+    lb: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'list'
+  with_items: "{{ lbs }}"
+
+- name: In load balancer state
+  include: "{{ item.state | default('present', true) }}.yml"
+  vars:
+    lb: "{{ item }}"
+  when:
+    - action is undefined 
+  with_items: "{{ lbs }}"
+
+- name: Update/create load balancer
+  include: present.yml
+  vars:
+    lb: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'present'
+    - item.state is undefined
+  with_items: "{{ lbs }}"
+
+- name: Delete load balancer
+  include: absent.yml
+  vars:
+    lb: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'absent'
+    - item.state is undefined
+  with_items: "{{ lbs }}"
+...

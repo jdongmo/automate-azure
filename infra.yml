@@ -14,7 +14,9 @@
     - {role: azure_route, action: 'list', tags: ["azure", "route"]}
     - {role: azure_subnet, tags: ["azure", "subnet"]}
     - {role: azure_ip, tags: ["azure", "ip"]}
+    - {role: azure_lb, tags: ["azure", "lb"]}
     - {role: azure_nic, tags: ["azure", "nic"]}
     - {role: azure_sa, tags: ["azure", "sa"]}
+    - {role: azure_avs, tags: ["azure", "avs"]}
     - {role: azure_vm, tags: ["azure", "vm"]}
 ...

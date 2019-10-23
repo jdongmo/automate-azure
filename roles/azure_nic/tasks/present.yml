@@ -29,7 +29,7 @@
     enable_accelerated_networking: "{{ nic.enable_accelerated_networking
     | default(omit, true) }}"
     enable_ip_forwarding: "{{ nic.enable_ip_forwarding | default(true, true) }}"
-    ip_configurations: "{{ nic.ip_configurations | default({}, true) }}"
+    ip_configurations: "{{ nic.ip_configurations | default(omit, true) }}"
     append_tags: false
     resource_group: "{{ nic.resource_group }}"
     security_group: "{{ nic.security_group | default(omit, true) }}"
