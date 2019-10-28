@@ -6,10 +6,11 @@
   roles:
     - known_hosts
 
-- name: Create extension
+- name: Create syslog server
   hosts:
     - azure_ec2
-  tasks:
+  gather_facts: yes
+  pre_tasks:
     - name: search log analytics workspace
       azure_rm_loganalyticsworkspace_facts:
         resource_group: "{{ hostvars[inventory_hostname].resource_group
@@ -22,30 +23,9 @@
       delegate_to: localhost
       register: azure_law_facts
 
-#    - name: search VM Extension
-#      azure_rm_virtualmachineextension_facts:
-#        name: "{{ inventory_hostname }}-ext01" 
-#        resource_group: "{{ hostvars[inventory_hostname].resource_group
-#        }}"
-#        virtual_machine_name: "{{ inventory_hostname }}"
-#      delegate_to: localhost
-#    - name: Create VM Extension
-#      azure_rm_virtualmachineextension:
-#        name: "{{ inventory_hostname }}-ext01" 
-#        resource_group: "{{ hostvars[inventory_hostname].resource_group
-#        }}"
-#        virtual_machine_name: "{{ inventory_hostname }}"
-#        publisher: "Microsoft.EnterpriseCloud.Monitoring"
-#        virtual_machine_extension_type: "OmsAgentForLinux"
-#        type_handler_version: "1.7"
-#        auto_upgrade_minor_version: true
-#        state: "present"
-#      delegate_to: localhost
-#
-- name: Create syslog server
-  hosts:
-    - azure_ec2
-  gather_facts: yes
+    - set_fact:
+        Azure_workspace_id: "{{ azure_law_facts.workspaces[0].customer_id }}"
+        Azure_workspace_sharedkey: "{{ azure_law_facts.workspaces[0].shared_keys.primary_shared_key }}"
   roles:
     - rsyslog
 ...
