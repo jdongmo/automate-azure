@@ -1,0 +1,43 @@
+---
+- name: Ensure omsagent directories exist
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ omsagent_root_dir }}"
+    - "{{ omsagent_root_dir }}/{{ Azure_workspace_id }}/omsagent.d"
+  become: yes
+
+- name: Get omsagent
+  get_url:
+    url: "https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh"
+    dest: "{{ omsagent_root_dir }}/onboard_agent.sh"
+    mode: '0550'
+  become: yes
+
+- name: Install and onboard omsagent
+  command:
+    argv:
+      - "./onboard_agent.sh"
+      - "-w"
+      - "{{ Azure_workspace_id }}"
+      - "-s"
+      - "{{ Azure_workspace_sharedkey }}"
+      - "-d"
+      - "opinsights.azure.com"
+  args:
+    chdir: "{{ omsagent_root_dir }}"
+  become: yes
+
+- name: Import omsagent rsyslog config
+  template:
+    src: security-config-omsagent.conf.j2
+    dest: '/etc/rsyslog.d/security-config-omsagent.conf'
+  become: yes
+
+- name: Import omsagent security event config
+  template:
+    src: "security_events.conf.j2"
+    dest: "{{ omsagent_root_dir }}/{{ Azure_workspace_id }}/omsagent.d/security_events.conf"
+  become: yes
+...

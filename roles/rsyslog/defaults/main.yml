@@ -1,0 +1,10 @@
+---
+rsyslog_packages:
+  - rsyslog
+
+sentinel_agent: true
+omsagent_root_dir: "/etc/opt/microsoft/omsagent"
+omsagent_version: "1.12.7-0"
+Azure_workspace_id: ""
+Azure_workspace_sharedkey: ""
+...

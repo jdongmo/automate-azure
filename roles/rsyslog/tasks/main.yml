@@ -1,0 +1,20 @@
+---
+- name: Install packages
+  package:
+    name: "{{ item }}"
+    state: 'present'
+  with_items: "{{ rsyslog_packages }}"
+  become: yes
+
+- name: Azure sentinel Agent
+  include: omsagent.yml
+  when:
+    - sentinel_agent | bool
+
+- name: Restart
+  service:
+    name: rsyslog
+    state: restarted
+    enabled: true
+  become: yes
+...
