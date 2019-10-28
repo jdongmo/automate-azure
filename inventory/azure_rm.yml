@@ -2,6 +2,8 @@ plugin: azure_rm
 auth_source: auto
 location: canadaeast,canadacentral,eastus,eastus2,westcentralus
 cloud_environment: "AzureCloud"
+default_host_filters:
+  - 'powerstate != "running"'
 hostvar_expressions:
   ansible_host: (public_ipv4_addresses + private_ipv4_addresses) | first
   provider: "'azure'"
