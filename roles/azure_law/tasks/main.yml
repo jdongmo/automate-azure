@@ -1,0 +1,42 @@
+---
+- name: list log analytics workspace
+  include: list.yml
+  vars:
+    law: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'list'
+    - (laws | default([], true) | length) > 0
+  with_items: "{{ laws }}"
+
+- name: In log analytics workspace state
+  include: "{{ item.state | default('present', true) }}.yml"
+  vars:
+    law: "{{ item }}"
+  when:
+    - action is undefined 
+    - (laws | default([], true) | length) > 0
+  with_items: "{{ laws }}"
+
+- name: Update/create log analytics workspace
+  include: present.yml
+  vars:
+    law: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'present'
+    - item.state is undefined
+    - (laws | default([], true) | length) > 0
+  with_items: "{{ laws }}"
+
+- name: Delete log analytics workspace
+  include: absent.yml
+  vars:
+    law: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'absent'
+    - item.state is undefined
+    - (laws | default([], true) | length) > 0
+  with_items: "{{ laws }}"
+...

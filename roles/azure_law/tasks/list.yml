@@ -1,0 +1,25 @@
+---
+- set_fact:
+    tags_list: "{{ tags_list | default([]) |
+    union([[tag.key,tag.value]|join(':')]) }}"
+  loop: "{{ lookup('dict', law.tags | default({})) }}"
+  loop_control:
+    loop_var: "tag"
+
+- name: Get log analytics workspace
+  azure_rm_loganalyticsworkspace_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ law.resource_group }}"
+    name: "{{ law.name }}"
+    show_intelligence_packs: true
+    show_shared_keys: true
+    show_usages: true
+  register: azure_law_facts
+
+- name: Print log analytics workspace
+  debug:
+    var: azure_law_facts
+...

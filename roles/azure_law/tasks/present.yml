@@ -1,0 +1,39 @@
+---
+- set_fact:
+    tags_list: "{{ tags_list | default([]) |
+    union([[tag.key,tag.value]|join(':')]) }}"
+  loop: "{{ lookup('dict', law.tags | default({})) }}"
+  loop_control:
+    loop_var: "tag"
+
+- name: Get log analytics workspace
+  azure_rm_loganalyticsworkspace_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ law.resource_group }}"
+    tags: "{{ tags_list | default(omit) }}"
+    name: "{{ law.name | default(omit) }}"
+    show_intelligence_packs: "{{ law.show_intelligence_packs |
+    default(true, true) }}"
+    show_usages: "{{ law.show_usages | default(true, true) }}"
+  register: azure_law_facts
+
+- name: Create log analytics workspace
+  azure_rm_loganalyticsworkspace:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    name: "{{ law.name }}"
+    intelligence_packs: "{{ law.intelligence_packs | default(omit, true) }}"
+    retention_in_days: "{{ law.retention_in_days | default(90, true) }}"
+    sku: "{{ law.sku | default(omit, true) }}"
+    location: "{{ law.location | default(omit, true) }}"
+    resource_group: "{{ law.resource_group }}"
+    append_tags: false
+    state: "present"
+    tags: "{{ law.tags | default(omit, true) }}"
+  register: createlaw
+...
