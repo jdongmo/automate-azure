@@ -6,6 +6,7 @@
   when:
     - action is defined 
     - action == 'list'
+    - (sas | default([], true) | length) > 0
   with_items: "{{ sas }}"
 
 - name: In storage account state
@@ -14,6 +15,7 @@
     sa: "{{ item }}"
   when:
     - action is undefined 
+    - (sas | default([], true) | length) > 0
   with_items: "{{ sas }}"
 
 - name: Update/create storage account
@@ -24,6 +26,7 @@
     - action is defined 
     - action == 'present'
     - item.state is undefined
+    - (sas | default([], true) | length) > 0
   with_items: "{{ sas }}"
 
 - name: Delete storage account
@@ -34,5 +37,6 @@
     - action is defined 
     - action == 'absent'
     - item.state is undefined
+    - (sas | default([], true) | length) > 0
   with_items: "{{ sas }}"
 ...

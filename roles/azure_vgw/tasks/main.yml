@@ -5,6 +5,7 @@
     vgw: "{{ item }}"
   when:
     - action is undefined 
+    - (vgws | default([], true) | length) > 0
   with_items: "{{ vgws }}"
 
 - name: Update/create virtual network gateway
@@ -15,6 +16,7 @@
     - action is defined 
     - action == 'present'
     - item.state is undefined
+    - (vgws | default([], true) | length) > 0
   with_items: "{{ vgws }}"
 
 - name: Delete virtual network gateway
@@ -25,5 +27,6 @@
     - action is defined 
     - action == 'absent'
     - item.state is undefined
+    - (vgws | default([], true) | length) > 0
   with_items: "{{ vgws }}"
 ...

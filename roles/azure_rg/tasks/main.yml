@@ -4,6 +4,7 @@
   when:
     - action is defined 
     - action == 'list'
+    - (rgs | default([], true) | length) > 0
   vars:
     rg: "{{ item }}"
   with_items: "{{ rgs }}"
@@ -14,6 +15,7 @@
     rg: "{{ item }}"
   when:
     - action is undefined 
+    - (rgs | default([], true) | length) > 0
   with_items: "{{ rgs }}"
 
 - name: Update/create resourse group
@@ -24,6 +26,7 @@
     - action is defined 
     - action == 'present'
     - item.state is undefined
+    - (rgs | default([], true) | length) > 0
   with_items: "{{ rgs }}"
 
 - name: Delete resourse group
@@ -34,5 +37,6 @@
     - action is defined 
     - action == 'absent'
     - item.state is undefined
+    - (rgs | default([], true) | length) > 0
   with_items: "{{ rgs }}"
 ...

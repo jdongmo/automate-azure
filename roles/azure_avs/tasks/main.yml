@@ -6,6 +6,7 @@
   when:
     - action is defined 
     - action == 'list'
+    - (avss | default([], true) | length) > 0
   with_items: "{{ avss }}"
 
 - name: In availability set state
@@ -14,6 +15,7 @@
     avs: "{{ item }}"
   when:
     - action is undefined 
+    - (avss | default([], true) | length) > 0
   with_items: "{{ avss }}"
 
 - name: Update/create availability set
@@ -24,6 +26,7 @@
     - action is defined 
     - action == 'present'
     - item.state is undefined
+    - (avss | default([], true) | length) > 0
   with_items: "{{ avss }}"
 
 - name: Delete availability set
@@ -34,5 +37,6 @@
     - action is defined 
     - action == 'absent'
     - item.state is undefined
+    - (avss | default([], true) | length) > 0
   with_items: "{{ avss }}"
 ...

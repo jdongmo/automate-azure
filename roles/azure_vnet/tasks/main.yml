@@ -6,6 +6,7 @@
   when:
     - action is defined 
     - action == 'list'
+    - (vnets | default([], true) | length) > 0
   with_items: "{{ vnets }}"
 
 - name: In virtual network state
@@ -14,6 +15,7 @@
     vnet: "{{ item }}"
   when:
     - action is undefined 
+    - (vnets | default([], true) | length) > 0
   with_items: "{{ vnets }}"
 
 - name: Update/create virtual network
@@ -23,6 +25,7 @@
   when:
     - action is defined 
     - action == 'present'
+    - (vnets | default([], true) | length) > 0
     - item.state is undefined
   with_items: "{{ vnets }}"
 
@@ -33,6 +36,7 @@
   when:
     - action is defined 
     - action == 'absent'
+    - (vnets | default([], true) | length) > 0
     - item.state is undefined
   with_items: "{{ vnets }}"
 ...

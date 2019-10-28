@@ -6,6 +6,7 @@
   when:
     - action is defined 
     - action == 'list'
+    - (vms | default([], true) | length) > 0
   with_items: "{{ vms }}"
 
 - name: In vm state
@@ -14,6 +15,7 @@
     vm: "{{ item }}"
   when:
     - action is undefined 
+    - (vms | default([], true) | length) > 0
   with_items: "{{ vms }}"
 
 - name: Update/create vm
@@ -24,6 +26,7 @@
     - action is defined 
     - action == 'present'
     - item.state is undefined
+    - (vms | default([], true) | length) > 0
   with_items: "{{ vms }}"
 
 - name: Delete vm
@@ -34,5 +37,6 @@
     - action is defined 
     - action == 'absent'
     - item.state is undefined
+    - (vms | default([], true) | length) > 0
   with_items: "{{ vms }}"
 ...

@@ -6,6 +6,7 @@
   when:
     - action is defined 
     - action == 'list'
+    - (subnets | default([], true) | length) > 0
   with_items: "{{ subnets }}"
 
 - name: In subnet state
@@ -14,6 +15,7 @@
     subnet: "{{ item }}"
   when:
     - action is undefined 
+    - (subnets | default([], true) | length) > 0
   with_items: "{{ subnets }}"
 
 - name: Update/create subnet
@@ -24,6 +26,7 @@
     - action is defined 
     - action == 'present'
     - item.state is undefined
+    - (subnets | default([], true) | length) > 0
   with_items: "{{ subnets }}"
 
 - name: Delete subnet
@@ -34,5 +37,6 @@
     - action is defined 
     - action == 'absent'
     - item.state is undefined
+    - (subnets | default([], true) | length) > 0
   with_items: "{{ subnets }}"
 ...
