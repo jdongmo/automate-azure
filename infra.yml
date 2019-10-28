@@ -5,10 +5,8 @@
   gather_facts: no
   roles:
     - {role: azure_rg, tags: ["azure", "rg"]}
-    - {role: azure_rg, rgs: [{'name': 'test3', 'location':
-      'canadacentral', 'state': 'absent'}, {'name': 'test2', 'location': 'canadaeast',
-      'state': 'absent'}], tags: ["azure", "rg"]}
     - {role: azure_vnet, tags: ["azure", "vnet"]}
+    - {role: azure_law, tags: ["azure", "law"]}
     - {role: azure_nsg, tags: ["azure", "nsg"]}
     - {role: azure_rt, tags: ["azure", "routetable"]}
     - {role: azure_route, action: 'list', tags: ["azure", "route"]}
