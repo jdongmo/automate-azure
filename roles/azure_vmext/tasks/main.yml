@@ -1,0 +1,42 @@
+---
+- name: list vm extension
+  include: list.yml
+  vars:
+    vmext: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'list'
+    - (vmexts | default([], true) | length) > 0
+  with_items: "{{ vmexts }}"
+
+- name: In vm extension state
+  include: "{{ item.state | default('present', true) }}.yml"
+  vars:
+    vmext: "{{ item }}"
+  when:
+    - action is undefined 
+    - (vmexts | default([], true) | length) > 0
+  with_items: "{{ vmexts }}"
+
+- name: Update/create vm extension
+  include: present.yml
+  vars:
+    vmext: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'present'
+    - item.state is undefined
+    - (vmexts | default([], true) | length) > 0
+  with_items: "{{ vmexts }}"
+
+- name: Delete vm extension
+  include: absent.yml
+  vars:
+    vmext: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'absent'
+    - item.state is undefined
+    - (vmexts | default([], true) | length) > 0
+  with_items: "{{ vmexts }}"
+...

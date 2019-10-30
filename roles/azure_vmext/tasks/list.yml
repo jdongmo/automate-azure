@@ -1,0 +1,18 @@
+---
+- name: Get vm extension
+  azure_rm_virtualmachineextension_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ vmext.resource_group }}"
+    tags: "{{ vmext.tags | default(omit) }}"
+    name: "{{ vmext.name | default(omit) }}"
+    virtual_machine_name: "{{ vmext.vm_name }}"
+  register: azure_vmext_facts
+  failed_when: false
+
+- name: Print vm extension
+  debug:
+    var: azure_vmext_facts.extensions
+...

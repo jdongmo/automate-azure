@@ -1,0 +1,26 @@
+---
+- name: Get virtual machine extension
+  azure_rm_virtualmachineextension_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ vmext.resource_group }}"
+    tags: "{{ vmext.tags | default(omit) }}"
+    name: "{{ vmext.name | default(omit) }}"
+    virtual_machine_name: "{{ vmext.vm_name }}"
+  register: azure_vmext_facts
+  failed_when: false
+
+- name: Delete virtual machine extension
+  azure_rm_virtualmachineextension:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    name: "{{ vmext.name }}"
+    resource_group: "{{ vmext.resource_group }}"
+    virtual_machine_name: "{{ vmext.vm_name }}"
+    state: "absent"
+  register: deletedvmext
+...

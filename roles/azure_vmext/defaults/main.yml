@@ -1,0 +1,17 @@
+---
+vmexts:
+  - name:
+    vm_name:
+    protected_settings:
+      workspaceKey:
+    settings:
+      workspaceId:
+    publisher:
+    virtual_machine_extension_type:
+    location:
+    resource_group:
+    state:
+    tags:
+      "env": "prod"
+      "provisioner": "ansible"
+...
