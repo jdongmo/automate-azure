@@ -1,0 +1,10 @@
+---
+subscriptionid:
+sentinels:
+  - law:
+      name:
+      subscriptionid:
+    resource_group:
+    state:
+    tag: "env=prod"
+...

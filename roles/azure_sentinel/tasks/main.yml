@@ -1,0 +1,42 @@
+---
+- name: list sentinel solution
+  include: list.yml
+  vars:
+    sentinel: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'list'
+    - (sentinels | default([], true) | length) > 0
+  with_items: "{{ sentinels }}"
+
+- name: In sentinel state
+  include: "{{ item.state | default('present', true) }}.yml"
+  vars:
+    sentinel: "{{ item }}"
+  when:
+    - action is undefined 
+    - (sentinels | default([], true) | length) > 0
+  with_items: "{{ sentinels }}"
+
+- name: Update/create Sentinel solution
+  include: present.yml
+  vars:
+    sentinel: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'present'
+    - item.state is undefined
+    - (sentinels | default([], true) | length) > 0
+  with_items: "{{ sentinels }}"
+
+- name: Delete sentinel solution
+  include: absent.yml
+  vars:
+    sentinel: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'absent'
+    - item.state is undefined
+    - (sentinels | default([], true) | length) > 0
+  with_items: "{{ sentinels }}"
+...

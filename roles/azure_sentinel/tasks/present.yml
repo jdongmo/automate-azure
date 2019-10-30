@@ -1,0 +1,47 @@
+---
+- name: List solution
+  command:
+    argv:
+      - "az"
+      - "resource"
+      - "list"
+      - "--resource-type"
+      - "Microsoft.OperationsManagement/solutions"
+      - "--name"
+      - "{{ sentinel.name | default('', true) }}"
+  register: azure_sentinel_facts
+  delegate_to: localhost
+
+- name: Push arm template
+  template:
+    src: "sentinel.json.j2"
+    dest: "/tmp/sentinel.json"
+  delegate_to: localhost
+
+- name: Validate template
+  command:
+    argv:
+      - "az"
+      - "group"
+      - "deployment"
+      - "validate"
+      - "-g"
+      - "{{ sentinel.resource_group }}"
+      - "--template-file"
+      - "/tmp/sentinel.json"
+  delegate_to: localhost
+
+- name: Create sentinel solution 
+  command:
+    argv:
+      - "az"
+      - "group"
+      - "deployment"
+      - "create"
+      - "-g"
+      - "{{ sentinel.resource_group }}"
+      - "--template-file"
+      - "/tmp/sentinel.json"
+  register: createsentinel
+  delegate_to: localhost
+...

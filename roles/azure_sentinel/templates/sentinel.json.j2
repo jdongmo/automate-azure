@@ -1,0 +1,34 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "solutions_SecurityInsights_name": {
+            "defaultValue": "SecurityInsights({{ sentinel.law.name }})",
+            "type": "String"
+        },
+        "workspaces_externalid": {
+            "defaultValue":
+            "/subscriptions/{{ sentinel.law.subscriptionid }}/resourceGroups/{{ sentinel.resource_group }}/providers/Microsoft.OperationalInsights/workspaces/{{ sentinel.law.name }}",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.OperationsManagement/solutions",
+            "apiVersion": "2015-11-01-preview",
+            "name": "[parameters('solutions_SecurityInsights_name')]",
+            "location": "East US",
+            "plan": {
+                "name": "SecurityInsights({{ sentinel.law.name }})",
+                "promotionCode": "",
+                "product": "OMSGallery/SecurityInsights",
+                "publisher": "Microsoft"
+            },
+            "properties": {
+                "workspaceResourceId": "[parameters('workspaces_externalid')]",
+                "containedResources": []
+            }
+        }
+    ]
+}

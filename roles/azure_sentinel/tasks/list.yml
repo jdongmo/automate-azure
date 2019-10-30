@@ -1,0 +1,14 @@
+---
+- name: List solution
+  command:
+    argv:
+      - "az resource list"
+      - "--resource-type"
+      - "Microsoft.OperationsManagement/solutions"
+      - "--name"
+      - "{{ sentinel.name | default('', true) }}"
+      - "-- tag"
+      - "{{ sentinel.tag | default('', true) }}"
+  register: azure_sentinel_facts
+  delegate_to: localhost
+...
