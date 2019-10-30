@@ -1,0 +1,15 @@
+---
+- name: Get resource
+  azure_rm_resource_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ res.resource_group }}"
+    resource_name: "{{ res.name }}"
+  register: azure_res_facts
+
+- name: Print resource
+  debug:
+    var: azure_res_facts
+...

@@ -1,0 +1,13 @@
+---
+ress:
+  - name:
+    idempotency: true
+    body:
+    method:
+    provider:
+    resource_type:
+    resource_group:
+    subresource:
+    state:
+    status_code:
+...

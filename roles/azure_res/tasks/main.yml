@@ -1,0 +1,42 @@
+---
+- name: list resources
+  include: list.yml
+  vars:
+    res: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'list'
+    - (ress | default([], true) | length) > 0
+  with_items: "{{ ress }}"
+
+- name: In log analytics workspace state
+  include: "{{ item.state | default('present', true) }}.yml"
+  vars:
+    res: "{{ item }}"
+  when:
+    - action is undefined 
+    - (ress | default([], true) | length) > 0
+  with_items: "{{ ress }}"
+
+- name: Update/create resources
+  include: present.yml
+  vars:
+    res: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'present'
+    - item.state is undefined
+    - (ress | default([], true) | length) > 0
+  with_items: "{{ ress }}"
+
+- name: Delete resources
+  include: absent.yml
+  vars:
+    res: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'absent'
+    - item.state is undefined
+    - (ress | default([], true) | length) > 0
+  with_items: "{{ ress }}"
+...

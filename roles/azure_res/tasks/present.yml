@@ -1,0 +1,29 @@
+---
+- name: Get resource
+  azure_rm_resource_facts:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ res.resource_group }}"
+    resource_name: "{{ res.name | default(omit) }}"
+  register: azure_res_facts
+
+- name: Create resource
+  azure_rm_resource:
+    client_id: "{{ azure_client_id | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_name: "{{ res.name | urlencode }}"
+    resource_type: "{{ res.resource_type }}"
+    resource_group: "{{ res.resource_group }}"
+    provider: "{{ res.provider }}"
+    idempotency: true
+    body: "{{ res.body | default(omit, true) }}"
+    method: "{{ res.method | default(omit, true) }}"
+    subresource: "{{ res.subresource | default(omit, true) }}"
+    status_code: "{{ res.status_code | default(omit, true) }}"
+    state: "present"
+  register: createres
+...
