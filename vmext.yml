@@ -1,31 +1,22 @@
 ---
-- name: Update ssh known host
+- name: Manage Virtual Machine Extension
   hosts:
-    - azure_ec2
+    - localhost
   gather_facts: no
-  roles:
-    - known_hosts
-
-- name: Create syslog server
-  hosts:
-    - azure_ec2
-  gather_facts: yes
   pre_tasks:
     - name: search log analytics workspace
       azure_rm_loganalyticsworkspace_facts:
-        resource_group: "{{ hostvars[inventory_hostname].resource_group
-        }}"
-        name: "hub-jdongmo-caea-law01"
+        resource_group: "{{ base_name }}-rg01"
+        name: "{{ base_name }}-law01"
         show_intelligence_packs: true
         show_management_groups: true
         show_usages: true
         show_shared_keys: true
-      delegate_to: localhost
       register: azure_law_facts
 
     - set_fact:
         Azure_workspace_id: "{{ azure_law_facts.workspaces[0].customer_id }}"
         Azure_workspace_sharedkey: "{{ azure_law_facts.workspaces[0].shared_keys.primary_shared_key }}"
   roles:
-    - {role: rsyslog}
+    - {role: azure_vmext, tags: ["azure", "vmext"]}
 ...
