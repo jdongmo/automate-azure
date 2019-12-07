@@ -1,0 +1,32 @@
+---
+
+- name: Include OS-specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+  tags:
+    - always
+
+- include: "repo-{{ ansible_os_family }}.yml"
+  when: pdns_rec_install_repo != ""
+  tags:
+    - install
+    - repository
+
+- include: install.yml
+  tags:
+    - install
+
+- include: configure.yml
+  tags:
+    - config
+
+- name: Set the status of the PowerDNS Recursor service
+  service:
+    name: "{{ pdns_rec_service_name }}"
+    state: "{{ pdns_rec_service_state }}"
+    enabled: "{{ pdns_rec_service_enabled }}"
+  tags:
+    - service
+
+- name: Force handlers flush
+  meta: flush_handlers
+  when: pdns_rec_flush_handlers
