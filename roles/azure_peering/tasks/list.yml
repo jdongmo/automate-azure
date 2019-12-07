@@ -1,0 +1,18 @@
+---
+- name: Get virtual network peering
+  azure_rm_virtualnetworkpeering_info:
+    ad_user: "{{ azure_ad_user | default(omit) }}"
+    password: "{{ azure_password | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    client_id: "{{ azure_client_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ peering.resource_group }}"
+    virtual_network_name: "{{ peering.virtual_network }}"
+    name: "{{ peering.name | default(omit, true) }}"
+  register: azure_peering_facts
+
+- name: Print peering
+  debug:
+    var: azure_peering_facts.vnetpeerings
+...

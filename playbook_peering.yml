@@ -1,0 +1,8 @@
+---
+- name: Manage peering
+  hosts:
+    - jumpboxes
+  gather_facts: no
+  roles:
+    - {role: azure_peering, tags: ["azure", "peering"]}
+...

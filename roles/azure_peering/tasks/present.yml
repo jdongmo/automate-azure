@@ -1,0 +1,34 @@
+---
+- name: Get virtual network peering
+  azure_rm_virtualnetworkpeering_info:
+    ad_user: "{{ azure_ad_user | default(omit) }}"
+    password: "{{ azure_password | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    client_id: "{{ azure_client_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    resource_group: "{{ peering.resource_group }}"
+    virtual_network: "{{ peering.virtual_network }}"
+    name: "{{ peering.name | default(omit, true) }}"
+  register: azure_peering_facts
+  failed_when: false
+
+- name: Create virtual network peering
+  azure_rm_virtualnetworkpeering:
+    ad_user: "{{ azure_ad_user | default(omit) }}"
+    password: "{{ azure_password | default(omit) }}"
+    subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    client_id: "{{ azure_client_id | default(omit) }}"
+    secret: "{{ azure_secret | default(omit) }}"
+    tenant: "{{ azure_tenant | default(omit) }}"
+    allow_forwarded_traffic: "{{ peering.allow_forwarded_traffic | default(false, true) }}"
+    allow_gateway_transit: "{{ peering.allow_gateway_transit | default(false, true) }}"
+    allow_virtual_network_access: "{{ peering.allow_virtual_network_access | default(true, true) }}"
+    use_remote_gateways: "{{ peering.use_remote_gateways | default(false, true) }}"
+    name: "{{ peering.name }}"
+    virtual_network: "{{ peering.virtual_network }}"
+    remote_virtual_network: "{{ peering.remote_virtual_network }}"
+    resource_group: "{{ peering.resource_group }}"
+    state: "present"
+  register: createpeering
+...
