@@ -13,5 +13,6 @@
 - import_playbook: playbook_network_interface_card.yml
 - import_playbook: playbook_route.yml
 - import_playbook: playbook_virtual_machine.yml
+- import_playbook: playbook_virtual_machine_extension.yml
 - import_playbook: playbook_peering.yml
 ...
