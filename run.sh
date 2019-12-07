@@ -17,10 +17,6 @@ export ANSIBLE_PLAYBOOK_FILE="${ANSIBLE_PLAYBOOK_FILE:-infra.yml}"
 export VAULT_PASSWORD_FILE="${VAULT_PASSWORD_FILE:-${HOME}/.ssh/creds/vault_password.txt}"
 export VAGRANT_MODE="${VAGRANT_MODE:-0}"
 
-# Fix for strange mounting issues. Should find a better solution.
-if [ -d "/root/ssh" ];then cp -R /root/ssh /root/.ssh; fi
-if [ -d "/root/devops" ];then cp -R /root/devops/* /opt/devops; fi
-
 run_ansible() {
   INOPTS=( "$@" )
   VAULTOPTS=""
@@ -28,10 +24,10 @@ run_ansible() {
   if [ -f "${VAULT_PASSWORD_FILE}" ]; then
     VAULTOPTS="--vault-password-file=${VAULT_PASSWORD_FILE}"
     if [ ${ANSIBLE_RUN_MODE} == 'playbook' ]; then
-      time ansible-playbook --diff "${VAULTOPTS}" "${ANSIBLE_PLAYBOOK_FILE}" "${INOPTS[@]}"
+      time ansible-playbook --diff ${VAULTOPTS} "${ANSIBLE_PLAYBOOK_FILE}" "${INOPTS[@]}"
       return $?
     elif [ ${ANSIBLE_RUN_MODE} == 'ad-hoc' ]; then
-      time ansible --diff "${VAULTOPTS}" "${INOPTS[@]}"
+      time ansible --diff ${VAULTOPTS} "${INOPTS[@]}"
       return $?
     fi
   else
@@ -39,11 +35,11 @@ run_ansible() {
       echo "Vault password file unreachable. Skip steps require vault."
       VAULTOPTS="--skip-tags=requires_vault"
       #echo "ansible-playbook --diff $VAULTOPTS ${INOPTS[@]} ${ANSIBLE_PLAYBOOK_FILE}" && \
-      time ansible-playbook --diff "${VAULTOPTS}" "${ANSIBLE_PLAYBOOK_FILE}" "${INOPTS[@]}"
+      time ansible-playbook --diff ${VAULTOPTS} "${ANSIBLE_PLAYBOOK_FILE}" "${INOPTS[@]}"
       return $?
     elif [ "${ANSIBLE_RUN_MODE}" == 'ad-hoc' ]; then
       #echo "ansible --diff $VAULTOPTS ${INOPTS[@]}" && \
-      time ansible --diff "${VAULTOPTS}" "${INOPTS[@]}"
+      time ansible --diff ${VAULTOPTS} "${INOPTS[@]}"
       return $?
     else
       echo "Invalid run mode: ${ANSIBLE_RUN_MODE}"
