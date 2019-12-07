@@ -1,0 +1,46 @@
+---
+- name: Manage Panos device
+  hosts:
+    - jumpboxes
+  tags:
+    - "ngfw"
+  gather_facts: no
+  roles:
+    - {role: PaloAltoNetworks.paloaltonetworks, tags: ["ngfw"], delegate_to: "{{ ansible_jump_host | default(omit, true) }}"}
+  tasks:
+    - name: Create syslog profile
+      panos_syslog_profile:
+        provider:
+          ip_address: "{{ hostvars[item].private_ipv4_address }}"
+          username: "{{ hostvars[item].ngfw_user }}"
+          password: "{{ hostvars[item].ngfw_password }}"
+          port: "{{ ngfw_port | default(443) }}"
+        name: "pan_syslog_profile"
+      with_items: "{{ ngfw_list }}"
+      delegate_to: "{{ ansible_jump_host | default(omit, true) }}"
+    - name: Create syslog server
+      panos_syslog_server:
+        provider:
+          ip_address: "{{ hostvars[item].private_ipv4_address }}"
+          username: "{{ hostvars[item].ngfw_user }}"
+          password: "{{ hostvars[item].ngfw_password }}"
+          port: "{{ ngfw_port | default(443) }}"
+        syslog_profile: "pan_syslog_profile"
+        name: "pan_syslog_server"
+        server: "{{ syslog_server }}"
+        format: "BSD"
+        port: 514
+      with_items: "{{ ngfw_list }}"
+      delegate_to: "{{ ansible_jump_host | default(omit, true) }}"
+    - name: Create log forwarding profile
+      panos_log_forwarding_profile:
+        provider:
+          ip_address: "{{ hostvars[item].private_ipv4_address }}"
+          username: "{{ hostvars[item].ngfw_user }}"
+          password: "{{ hostvars[item].ngfw_password }}"
+          port: "{{ ngfw_port | default(443) }}"
+        name: "pan_log_forward_profile"
+        enhanced_logging: true
+      with_items: "{{ ngfw_list }}"
+      delegate_to: "{{ ansible_jump_host | default(omit, true) }}"
+...
