@@ -1,0 +1,8 @@
+---
+- name: Manage storage account
+  hosts:
+    - jumpboxes
+  gather_facts: no
+  roles:
+    - {role: azure_sa, tags: ["azure", "sa"]}
+...

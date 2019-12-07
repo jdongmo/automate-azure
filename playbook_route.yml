@@ -1,0 +1,8 @@
+---
+- name: Manage user defined route
+  hosts:
+    - jumpboxes
+  gather_facts: no
+  roles:
+    - {role: azure_route, action: 'list', tags: ["azure", "route"]}
+...

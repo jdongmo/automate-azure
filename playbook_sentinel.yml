@@ -1,0 +1,8 @@
+---
+- name: Manage sentinel solution
+  hosts:
+    - jumpboxes
+  gather_facts: no
+  roles:
+    - {role: azure_sentinel, tags: ["azure", "sentinel"]}
+...

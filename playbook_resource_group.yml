@@ -1,0 +1,8 @@
+---
+- name: Manage resource group
+  hosts:
+    - jumpboxes
+  gather_facts: no
+  roles:
+    - {role: azure_rg, tags: ["azure", "rg"]}
+...

@@ -1,0 +1,8 @@
+---
+- name: Manage routing table
+  hosts:
+    - jumpboxes
+  gather_facts: no
+  roles:
+    - {role: azure_rt, tags: ["azure", "routetable"]}
+...

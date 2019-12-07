@@ -1,0 +1,8 @@
+---
+- name: Manage network interface card
+  hosts:
+    - jumpboxes
+  gather_facts: no
+  roles:
+    - {role: azure_nic, tags: ["azure", "nic"]}
+...

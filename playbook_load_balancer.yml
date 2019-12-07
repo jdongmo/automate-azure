@@ -1,0 +1,8 @@
+---
+- name: Manage load balancer
+  hosts:
+    - jumpboxes
+  gather_facts: no
+  roles:
+    - {role: azure_lb, tags: ["azure", "lb"]}
+...
