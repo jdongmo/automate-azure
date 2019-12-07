@@ -1,23 +1,16 @@
 ---
-- name: Create infra
-  hosts:
-    - localhost
-  gather_facts: no
-  roles:
-    - {role: azure_rg, tags: ["azure", "rg"]}
-    - {role: azure_law, tags: ["azure", "law"]}
-    - {role: azure_sentinel, tags: ["azure", "sentinel"]}
-#    - {role: azure_res, ress: [{name: sentinel, resource_group:
-#      "{{base_name}}-rg01", resource_type: "solutions" , provider: 'OperationsManagement'}], action: 'present', tags: ["azure", "rg"]}
-    - {role: azure_vnet, tags: ["azure", "vnet"]}
-    - {role: azure_nsg, tags: ["azure", "nsg"]}
-    - {role: azure_rt, tags: ["azure", "routetable"]}
-    - {role: azure_route, action: 'list', tags: ["azure", "route"]}
-    - {role: azure_subnet, tags: ["azure", "subnet"]}
-    - {role: azure_ip, tags: ["azure", "ip"]}
-    - {role: azure_lb, tags: ["azure", "lb"]}
-    - {role: azure_nic, tags: ["azure", "nic"]}
-    - {role: azure_sa, tags: ["azure", "sa"]}
-    - {role: azure_avs, tags: ["azure", "avs"]}
-    - {role: azure_vm, tags: ["azure", "vm"]}
+- import_playbook: playbook_resource_group.yml
+- import_playbook: playbook_availability_set.yml
+- import_playbook: playbook_storage_account.yml
+- import_playbook: playbook_analytics_workspace.yml
+- import_playbook: playbook_sentinel.yml
+- import_playbook: playbook_virtual_network.yml
+- import_playbook: playbook_routing_table.yml
+- import_playbook: playbook_network_security_group.yml
+- import_playbook: playbook_subnet.yml
+- import_playbook: playbook_ip.yml
+- import_playbook: playbook_load_balancer.yml
+- import_playbook: playbook_network_interface_card.yml
+- import_playbook: playbook_route.yml
+- import_playbook: playbook_virtual_machine.yml
 ...
