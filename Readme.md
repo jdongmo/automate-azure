@@ -7,6 +7,33 @@ To run Azure recipe, you should have Azure variable (credentials and
 location) set in environment
 or having vault file with authentication variables
 
+The host running plays must have python3 installed and library in requirements.txt file
+```
+pip3 install -r requirements.txt --user
+```
+The host must also have following packages:
+- sshpass
+- azure-cli
+
+Give azure credentials in a file *_creds.yml*
+```
+---
+azure_subscription_id: 7ac52367-fb6a-483d-a5ee-c1f218fa0bcc
+#Connect using AD account
+azure_ad_user: user@domain.tld
+azure_password: **************
+#Connect using service principal
+azure_client_id: a747fc62-38fa-453d-a5fa-ab3039a464cc
+azure_secret: *******************************
+azure_tenant: 728d20a5-0b44-47dd-9470-20f37cbf2d9a
+...
+```
+And encrypt it with **ansible-vault** 
+```
+example:
+ansible-vault encrypt --vault-password-file  ~/.ssh/creds/vault_password.txt inventory/group_vars/jumpboxes/_creds.yml
+```
+
 ## Run
 To run a playbook, we'll use wrapper script run.sh
 To run default infrastructure playbook *infra.yml* who create all the infra
