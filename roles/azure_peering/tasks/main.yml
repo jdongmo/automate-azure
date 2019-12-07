@@ -1,0 +1,42 @@
+---
+- name: list virtual network peering
+  include: list.yml
+  vars:
+    peering: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'list'
+    - (peerings | default([], true) | length) > 0
+  with_items: "{{ peerings }}"
+
+- name: In virtual network peering state
+  include: "{{ item.state | default('present', true) }}.yml"
+  vars:
+    peering: "{{ item }}"
+  when:
+    - action is undefined 
+    - (peerings | default([], true) | length) > 0
+  with_items: "{{ peerings }}"
+
+- name: Update/create virtual network peering
+  include: present.yml
+  vars:
+    peering: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'present'
+    - item.state is undefined
+    - (peerings | default([], true) | length) > 0
+  with_items: "{{ peerings }}"
+
+- name: Delete virtual network peering
+  include: absent.yml
+  vars:
+    peering: "{{ item }}"
+  when:
+    - action is defined 
+    - action == 'absent'
+    - item.state is undefined
+    - (peerings | default([], true) | length) > 0
+  with_items: "{{ peerings }}"
+...
