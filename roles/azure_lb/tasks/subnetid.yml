@@ -3,25 +3,13 @@
   set_fact:
     cfipc: {}
 
-- name: Get virtual network
-  azure_rm_virtualnetwork_facts:
-    client_id: "{{ azure_client_id | default(omit) }}"
-    subscription_id: "{{ azure_subscription_id | default(omit) }}"
-    secret: "{{ azure_secret | default(omit) }}"
-    tenant: "{{ azure_tenant | default(omit) }}"
-    resource_group: "{{ lb.resource_group }}"
-    name: "{{ fipc.virtual_network_name }}"
-  register: azure_vnet_facts
-  failed_when:
-    - (azure_vnet_facts.virtualnetworks | length) < 1
-
 - name: Get subnet
   azure_rm_subnet_facts:
     client_id: "{{ azure_client_id | default(omit) }}"
     subscription_id: "{{ azure_subscription_id | default(omit) }}"
     secret: "{{ azure_secret | default(omit) }}"
     tenant: "{{ azure_tenant | default(omit) }}"
-    resource_group: "{{ lb.resource_group }}"
+    resource_group: "{{ fipc.resource_group | default(lb.resource_group, true) }}"
     virtual_network_name: "{{ fipc.virtual_network_name }}"
     name: "{{ fipc.subnet_name }}"
   register: azure_subnet_facts
@@ -35,7 +23,7 @@
   loop_control:
     loop_var: "field"
   when:
-    - field.key not in ['virtual_network_name', 'subnet_name']
+    - field.key not in ['virtual_network_name', 'subnet_name', 'resource_group']
 
 - name: Set subnet id
   set_fact:

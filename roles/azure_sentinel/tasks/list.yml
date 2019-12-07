@@ -1,13 +1,39 @@
 ---
+- name: Login to azure
+  command:
+    argv:
+      - "az"
+      - "login"
+      - "--service-principal"
+      - "-u"
+      - "{{ azure_client_id }}"
+      - "-p"
+      - "{{ azure_secret }}"
+      - "-t"
+      - "{{ azure_tenant }}"
+  delegate_to: localhost
+
+- name: Select subscription
+  command:
+    argv:
+      - "az"
+      - "account"
+      - "set"
+      - "-s"
+      - "{{ sentinel.law.subscriptionid }}"
+  delegate_to: localhost
+
 - name: List solution
   command:
     argv:
-      - "az resource list"
+      - "az"
+      - "resource"
+      - "list"
       - "--resource-type"
       - "Microsoft.OperationsManagement/solutions"
       - "--name"
-      - "{{ sentinel.name | default('', true) }}"
-      - "-- tag"
+      - "{{ sentinel.law.name | default('', true) }}"
+      - "--tag"
       - "{{ sentinel.tag | default('', true) }}"
   register: azure_sentinel_facts
   delegate_to: localhost

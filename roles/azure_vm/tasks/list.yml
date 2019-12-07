@@ -10,8 +10,8 @@
   azure_rm_virtualmachine_facts:
     ad_user: "{{ azure_ad_user | default(omit) }}"
     password: "{{ azure_password | default(omit) }}"
-    client_id: "{{ azure_client_id | default(omit) }}"
     subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    client_id: "{{ azure_client_id | default(omit) }}"
     secret: "{{ azure_secret | default(omit) }}"
     tenant: "{{ azure_tenant | default(omit) }}"
     resource_group: "{{ vm.resource_group }}"

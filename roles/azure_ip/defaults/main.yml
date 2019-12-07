@@ -1,15 +1,15 @@
 ---
 ips:
-  - name:
-    allocation_method: "static"
-    domain_name:
-    idle_timeout: 4
-    ip_tags:
-    resource_group:
-    sku: "standard"
-    state:
-    version:
-    tags:
-      "env": "prod"
-      "provisioner": "ansible"
+#  - name:
+#    allocation_method: "static"
+#    domain_name:
+#    idle_timeout: 4
+#    ip_tags:
+#    resource_group:
+#    sku: "standard"
+#    state:
+#    version:
+#    tags:
+#      "env": "prod"
+#      "provisioner": "ansible"
 ...

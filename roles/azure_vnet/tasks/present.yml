@@ -2,14 +2,16 @@
 - set_fact:
     tags_list: "{{ tags_list | default([]) |
     union([[tag.key,tag.value]|join(':')]) }}"
-  loop: "{{ lookup('dict', vnet.tags) }}"
+  loop: "{{ lookup('dict', vnet.tags | default({}, true)) }}"
   loop_control:
     loop_var: "tag"
 
 - name: Get virtual network
   azure_rm_virtualnetwork_facts:
-    client_id: "{{ azure_client_id | default(omit) }}"
+    ad_user: "{{ azure_ad_user | default(omit) }}"
+    password: "{{ azure_password | default(omit) }}"
     subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    client_id: "{{ azure_client_id | default(omit) }}"
     secret: "{{ azure_secret | default(omit) }}"
     tenant: "{{ azure_tenant | default(omit) }}"
     resource_group: "{{ vnet.resource_group | default(omit) }}"
@@ -19,13 +21,15 @@
 
 - name: Create virtual network
   azure_rm_virtualnetwork:
-    client_id: "{{ azure_client_id | default(omit) }}"
+    ad_user: "{{ azure_ad_user | default(omit) }}"
+    password: "{{ azure_password | default(omit) }}"
     subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    client_id: "{{ azure_client_id | default(omit) }}"
     secret: "{{ azure_secret | default(omit) }}"
     tenant: "{{ azure_tenant | default(omit) }}"
     name: "{{ vnet.name }}"
     address_prefixes_cidr: "{{ vnet.address_prefixes_cidr }}"
-    purge_address_prefixes: true
+    purge_address_prefixes: "{{ vnet.purge_address_prefixes | default(true, true) }}"
     location: "{{ vnet.location }}"
     resource_group: "{{ vnet.resource_group }}"
     state: "present"

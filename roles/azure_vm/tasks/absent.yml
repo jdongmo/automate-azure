@@ -8,8 +8,10 @@
 
 - name: Get virtual machine
   azure_rm_virtualmachine_facts:
-    client_id: "{{ azure_client_id | default(omit) }}"
+    ad_user: "{{ azure_ad_user | default(omit) }}"
+    password: "{{ azure_password | default(omit) }}"
     subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    client_id: "{{ azure_client_id | default(omit) }}"
     secret: "{{ azure_secret | default(omit) }}"
     tenant: "{{ azure_tenant | default(omit) }}"
     resource_group: "{{ vm.resource_group }}"
@@ -20,15 +22,17 @@
 
 - name: Delete virtual machine
   azure_rm_virtualmachine:
-    client_id: "{{ azure_client_id | default(omit) }}"
+    ad_user: "{{ azure_ad_user | default(omit) }}"
+    password: "{{ azure_password | default(omit) }}"
     subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    client_id: "{{ azure_client_id | default(omit) }}"
     secret: "{{ azure_secret | default(omit) }}"
     tenant: "{{ azure_tenant | default(omit) }}"
     name: "{{ vm.name }}"
     image: "{{ vm.image }}"
     remove_on_absent: "{{ vm.remove_on_absent | default('all_autocreated', true) }}"
     resource_group: "{{ vm.resource_group }}"
-    virtual_network: "{{ vm.virtual_network }}"
+    virtual_network: "{{ vm.virtual_network | default(omit, true) }}"
     state: "absent"
   register: deletedvm
 ...

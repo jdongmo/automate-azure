@@ -2,14 +2,16 @@
 - set_fact:
     tags_list: "{{ tags_list | default([]) |
     union([[tag.key,tag.value]|join(':')]) }}"
-  loop: "{{ lookup('dict', ip.tags | default({})) }}"
+  loop: "{{ lookup('dict', ip.tags | default({}, true)) }}"
   loop_control:
     loop_var: "tag"
 
 - name: Get ip address
   azure_rm_publicipaddress_facts:
-    client_id: "{{ azure_client_id | default(omit) }}"
+    ad_user: "{{ azure_ad_user | default(omit) }}"
+    password: "{{ azure_password | default(omit) }}"
     subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    client_id: "{{ azure_client_id | default(omit) }}"
     secret: "{{ azure_secret | default(omit) }}"
     tenant: "{{ azure_tenant | default(omit) }}"
     resource_group: "{{ ip.resource_group }}"
@@ -19,8 +21,10 @@
 
 - name: Create ip address
   azure_rm_publicipaddress:
-    client_id: "{{ azure_client_id | default(omit) }}"
+    ad_user: "{{ azure_ad_user | default(omit) }}"
+    password: "{{ azure_password | default(omit) }}"
     subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    client_id: "{{ azure_client_id | default(omit) }}"
     secret: "{{ azure_secret | default(omit) }}"
     tenant: "{{ azure_tenant | default(omit) }}"
     name: "{{ ip.name }}"

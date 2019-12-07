@@ -1,13 +1,13 @@
 ---
-laws:
-  - name:
-    intelligence_packs:
-    location:
-    resource_group:
-    retention_in_days: -1
-    sku: unlimited
-    state:
-    tags:
-      "env": "prod"
-      "provisioner": "ansible"
+#laws:
+#  - name:
+#    intelligence_packs:
+#    location:
+#    resource_group:
+#    retention_in_days: -1
+#    sku: unlimited
+#    state:
+#    tags:
+#      "env": "prod"
+#      "provisioner": "ansible"
 ...

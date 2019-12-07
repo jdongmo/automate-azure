@@ -1,12 +1,21 @@
 ---
+- set_fact:
+    tags_list: "{{ tags_list | default([]) |
+    union([[tag.key,tag.value]|join(':')]) }}"
+  loop: "{{ lookup('dict', vmext.tags | default({}, true)) }}"
+  loop_control:
+    loop_var: "tag"
+
 - name: Get virtual machine extension
-  azure_rm_virtualmachineextension_facts:
-    client_id: "{{ azure_client_id | default(omit) }}"
+  azure_rm_virtualmachineextension_info:
+    ad_user: "{{ azure_ad_user | default(omit) }}"
+    password: "{{ azure_password | default(omit) }}"
     subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    client_id: "{{ azure_client_id | default(omit) }}"
     secret: "{{ azure_secret | default(omit) }}"
     tenant: "{{ azure_tenant | default(omit) }}"
     resource_group: "{{ vmext.resource_group }}"
-    tags: "{{ vmext.tags | default(omit) }}"
+    tags: "{{ tags_list | default(omit) }}"
     name: "{{ vmext.name | default(omit) }}"
     virtual_machine_name: "{{ vmext.vm_name }}"
   register: azure_vmext_facts
@@ -14,8 +23,10 @@
 
 - name: Create virtual machine extension
   azure_rm_virtualmachineextension:
-    client_id: "{{ azure_client_id | default(omit) }}"
+    ad_user: "{{ azure_ad_user | default(omit) }}"
+    password: "{{ azure_password | default(omit) }}"
     subscription_id: "{{ azure_subscription_id | default(omit) }}"
+    client_id: "{{ azure_client_id | default(omit) }}"
     secret: "{{ azure_secret | default(omit) }}"
     tenant: "{{ azure_tenant | default(omit) }}"
     name: "{{ vmext.name }}"
