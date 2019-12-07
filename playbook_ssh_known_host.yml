@@ -1,0 +1,11 @@
+---
+- name: Update ssh known host
+  hosts:
+    - jumpboxes
+    - azure_ec2
+  tags:
+    - "ssh"
+  gather_facts: no
+  roles:
+    - {role: known_hosts, tags: ["ssh"]}
+...
