@@ -27,7 +27,7 @@ python-dateutil==2.8.2
 humanfriendly==10.0
 PyJWT==2.3.0
 charset-normalizer==2.0.9
-certifi==2021.10.8
+certifi==2022.12.7
 argcomplete==1.12.3
 applicationinsights==0.11.10
 adal==1.2.7
